@@ -15,5 +15,11 @@ pipeline {
         sh "mvn clean package"
       }
     }
+
+    stage ('Build Docker Image'){
+      script{
+        sh 'docker build -t navreetk/my-app-0.1.'
+      }
+    }
   }
 }
