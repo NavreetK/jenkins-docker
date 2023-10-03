@@ -19,7 +19,10 @@ pipeline {
     stage ('Build Docker Image'){
       steps{
       script{
-        sh 'docker build -t navreetk/my-app-0.1.'
+        withDockerRegistry(credentialsId: 'docker_id') {
+         sh "docker build -t navreetk/firstcommit:tag1"
+          sh "docker push"
+        }
       }
       }
     }
