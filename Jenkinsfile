@@ -19,7 +19,7 @@ pipeline {
     stage ('Build Docker Image'){
       steps{
       script{
-        sh 'docker build -t navreetk/my-app-0.1.'
+        sh 'docker build -t navreetk/myapp.'
       }
       }
     }
