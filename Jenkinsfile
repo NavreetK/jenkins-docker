@@ -15,16 +15,36 @@ pipeline {
         sh "mvn clean package"
       }
     }
-
-    stage ('Build Docker Image'){
+    stage ('Create Image'){
+        steps{
+             sh "docker build -t navreetk/firstcommit:${BUILD_NUMBER} ."
+        }
+    }
+    stage('Docker Login'){
+        steps{
+            withCredentials([
+                usernamePassword(credentialsId: 'docker_id', 
+                passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+        sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+        }
+        
+        }
+    }
+    
+    stage ('Push Docker Image'){
       steps{
       script{
-        withDockerRegistry(credentialsId: 'docker_id') {
-         sh "docker build -t navreetk/firstcommit:tag1"
-          sh "docker push"
+          sh "docker push navreetk/firstcommit:${BUILD_NUMBER}"
         }
       }
-      }
+    }
+    stage('Deploy to Docker'){
+        steps{
+            sh "docker run -itd -p 8081:8080 docker push navreetk/firstcommit:${BUILD_NUMBER}"
+            archiveArtifacts '**/target/*.jar'
+        }
+        
+    }
+    
     }
   }
-}
