@@ -1,5 +1,5 @@
 
-package com.webapp;
+package com.javaexpress.docker.webapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
