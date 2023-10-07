@@ -40,8 +40,12 @@ pipeline {
     }
     stage('Deploy to Docker'){
         steps{
-            sh "docker run -itd -p 8081:8080 docker push navreetk/firstcommit:${BUILD_NUMBER}"
-            archiveArtifacts '**/target/*.jar'
+            script{
+                def dockerRun = 'docker run -itd -p 8081:8080 -d navreetk/firstcommit:${BUILD_NUMBER}        
+               sshagent(['ubuntu']) { 
+            sh "ssh -o StrictHostKeyChecking=no ubuntu@35.183.188.90 ${dockerRun}"          
+        }
+            }
         }
         
     }
